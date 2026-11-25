@@ -173,7 +173,7 @@ export default function Order() {
                         label={`${c.name} quantity`}
                         value={qty}
                         min={0}
-                        max={PRODUCT.maxQuantity}
+                        max={qty + Math.max(0, PRODUCT.maxQuantity - count)}
                         onChange={(n) => {
                           setQty(c.id, n);
                           if (n > qty) setColor(c);
@@ -471,7 +471,7 @@ function OrderBar({
               className="mt-5 h-8 opacity-70"
               style={{
                 backgroundImage:
-                  "repeating-linear-gradient(90deg, #0e0e10 0 2px, transparent 2px 5px, #0e0e10 5px 6px, transparent 6px 10px, #0e0e10 10px 13px, transparent 13px 16px)",
+                  "repeating-linear-gradient(90deg, var(--color-ink) 0 2px, transparent 2px 5px, var(--color-ink) 5px 6px, transparent 6px 10px, var(--color-ink) 10px 13px, transparent 13px 16px)",
               }}
             />
           </>

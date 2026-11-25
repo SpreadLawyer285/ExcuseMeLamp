@@ -140,7 +140,7 @@ export default function Home() {
   const [upsideDown, setUpsideDown] = useState(false);
   const [flipTick, setFlipTick] = useState(0);
   const shown = upsideDown ? FLIPPED_COLOR : color;
-  const accentInk = isLight(color.hex) ? "text-ink" : "text-white";
+  const accentInk = isLight(color.hex) ? "text-night" : "text-white";
 
   return (
     <div className="page-enter overflow-x-clip">
@@ -312,7 +312,7 @@ export default function Home() {
                     aria-pressed={selected}
                     onClick={() => setColor(c)}
                     className={`group relative flex aspect-[3/4] w-full flex-col justify-between overflow-hidden rounded-[1.75rem] p-4 text-left transition duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-                      light ? "text-ink" : "text-white"
+                      light ? "text-night" : "text-white"
                     } ${selected ? "ring-2 ring-ink ring-offset-4 ring-offset-paper" : ""}`}
                     style={{
                       background: `linear-gradient(165deg, ${c.hex}, color-mix(in srgb, ${c.hex} 62%, #000))`,
@@ -502,18 +502,23 @@ export default function Home() {
                       y1={m.fy}
                       x2={m.x - 12}
                       y2={m.y}
-                      stroke="#0e0e10"
+                      style={{ stroke: "var(--color-ink)" }}
                       strokeWidth="1"
                       strokeDasharray="3 3"
                     />
-                    <circle cx={m.x} cy={m.y} r="12" fill="#0e0e10" />
+                    <circle
+                      cx={m.x}
+                      cy={m.y}
+                      r="12"
+                      style={{ fill: "var(--color-ink)" }}
+                    />
                     <text
                       x={m.x}
                       y={m.y + 4.5}
                       textAnchor="middle"
                       fontSize="13"
                       fontWeight="800"
-                      fill="#f3f2ee"
+                      style={{ fill: "var(--color-paper)" }}
                     >
                       {m.n}
                     </text>
@@ -567,7 +572,7 @@ export default function Home() {
             <div
               className="stripes relative overflow-hidden rounded-[2rem] p-8 sm:p-14 lg:p-20"
               style={{
-                background: `linear-gradient(135deg, color-mix(in srgb, ${color.hex} 55%, #f3f2ee), color-mix(in srgb, ${color.hex} 18%, #f3f2ee))`,
+                background: `linear-gradient(135deg, color-mix(in srgb, ${color.hex} 55%, var(--color-paper)), color-mix(in srgb, ${color.hex} 18%, var(--color-paper)))`,
               }}
             >
               <Rings className="pointer-events-none absolute -left-24 -top-24 w-[26rem] text-ink/15" />
@@ -576,7 +581,7 @@ export default function Home() {
               <p className="relative max-w-4xl text-4xl font-black leading-[1.02] tracking-tighter sm:text-6xl lg:text-7xl">
                 While they dine, it{" "}
                 <span
-                  className="inline-block -rotate-2 rounded-full px-5 text-ink"
+                  className="inline-block -rotate-2 rounded-full px-5 text-night"
                   style={{ backgroundColor: color.hex }}
                 >
                   glows
@@ -715,7 +720,7 @@ export default function Home() {
                 key={r.name}
                 className={`relative flex flex-col justify-between overflow-hidden rounded-[2rem] p-7 text-ink transition duration-300 hover:-translate-y-2 hover:rotate-0 ${r.span} ${r.rot} ${r.h}`}
                 style={{
-                  background: `linear-gradient(150deg, color-mix(in srgb, ${color.hex} ${r.mix}%, #f3f2ee), color-mix(in srgb, ${color.hex} ${Math.min(100, r.mix + 25)}%, #f3f2ee))`,
+                  background: `linear-gradient(150deg, color-mix(in srgb, ${color.hex} ${r.mix}%, var(--color-paper))), color-mix(in srgb, ${color.hex} ${Math.min(100, r.mix + 25)}%, var(--color-paper)))`,
                 }}
               >
                 <span

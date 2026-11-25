@@ -22,7 +22,7 @@ export const PRODUCT = {
   name: 'Excuse Me Lamp',
   price: 89,
   currency: 'EUR',
-  maxQuantity: 10,
+  maxQuantity: 50,
 }
 
 export const formatPrice = (n: number) =>

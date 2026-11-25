@@ -8,6 +8,8 @@
   --color-line: #dad8d0;
   --color-yellow: #ffd21f;
   --color-red: #ff2d2d;
+  --color-night: #0e0e10;
+  --color-day: #f3f2ee;
 }
 
 html { background: var(--color-paper); color: var(--color-ink); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
@@ -81,7 +83,7 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
 .welcome {
   --accent: var(--color-yellow);
   --d: min(48vmin, 440px);
-  transition: opacity .4s ease, --accent .5s ease;
+  transition: opacity .25s ease, --accent .35s ease;
 }
 .welcome[data-phase="red"],
 .welcome[data-phase="flood"],
@@ -166,11 +168,11 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
 .welcome {
   --accent: var(--color-yellow);
   position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow: hidden;
-  background: var(--color-ink);
+  background: var(--color-night);
   transition: opacity .4s ease, --accent .5s ease;
 }
 /* decorations follow the lamp: red a moment after the tumble starts */
-.welcome[data-phase="flip"] { --accent: var(--color-red); transition: opacity .4s ease, --accent .6s ease .55s; }
+.welcome[data-phase="flip"] { --accent: var(--color-red); transition: opacity .25s ease, --accent .4s ease .25s; }
 .welcome[data-phase="flood"], .welcome[data-phase="out"] { --accent: var(--color-red); }
 .welcome[data-phase="out"] { opacity: 0; pointer-events: none; }
 .welcome__skip { position: absolute; bottom: max(1.5rem, env(safe-area-inset-bottom)); right: 1.5rem; z-index: 3; }
@@ -193,12 +195,12 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
 .welcome__flood {
   position: absolute; left: 50%; top: 50%; width: 20vmin; aspect-ratio: 1; margin: -10vmin 0 0 -10vmin;
   border-radius: 50%; background: var(--color-red); transform: scale(0); will-change: transform;
-  transition: transform 1s cubic-bezier(.7,0,.2,1), background-color .6s ease .3s;
+  transition: transform .7s cubic-bezier(.7,0,.2,1), background-color .4s ease .2s;
 }
 .welcome[data-phase="flood"] .welcome__flood, .welcome[data-phase="out"] .welcome__flood { transform: scale(16); background: var(--color-paper); }
 
 /* the scene */
-.welcome__stage { position: relative; z-index: 2; display: grid; place-items: center; transition: opacity .35s ease, transform .6s ease; }
+.welcome__stage { position: relative; z-index: 2; display: grid; place-items: center; transition: opacity .25s ease, transform .4s ease; }
 .welcome[data-phase="flood"] .welcome__stage, .welcome[data-phase="out"] .welcome__stage { opacity: 0; transform: scale(1.06); }
 
 .welcome__glow {
@@ -223,17 +225,17 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
   position: absolute; left: 50%; top: -2%; z-index: 3; display: flex; margin: 0; padding: .3em .6em .35em;
   transform: translateX(8%) rotate(4deg); visibility: hidden;
   font-size: clamp(1.8rem, 6vw, 3.4rem); font-weight: 900; line-height: 1; letter-spacing: -.04em; white-space: nowrap;
-  color: var(--color-ink); background: var(--color-paper); border-radius: 1.2em 1.2em 1.2em .3em;
+  color: var(--color-night); background: var(--color-day); border-radius: 1.2em 1.2em 1.2em .3em;
 }
 .welcome__bubble::after {
   content: ""; position: absolute; left: .55em; bottom: -.3em; width: .7em; height: .7em;
-  background: var(--color-paper); clip-path: polygon(0 0, 100% 0, 0 100%);
+  background: var(--color-day); clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 .welcome__bubble span { display: inline-block; white-space: pre; }
-.welcome[data-ready="true"] .welcome__bubble { visibility: visible; animation: bubble-pop .55s cubic-bezier(.34,1.56,.64,1) .45s backwards; }
-.welcome[data-ready="true"] .welcome__bubble span { animation: letter-pop .5s cubic-bezier(.34,1.56,.64,1) backwards; animation-delay: calc(.65s + var(--i) * 50ms); }
+.welcome[data-ready="true"] .welcome__bubble { visibility: visible; animation: bubble-pop .35s ease-out .15s backwards; }
+.welcome[data-ready="true"] .welcome__bubble span { animation: letter-pop .3s ease-out backwards; animation-delay: calc(.25s + var(--i) * 25ms); }
 .welcome[data-phase="flip"] .welcome__bubble { animation: bubble-shake .7s ease .1s; }
-@keyframes bubble-pop { from { transform: translateX(8%) rotate(4deg) scale(0); } to { transform: translateX(8%) rotate(4deg) scale(1); } }
+@keyframes bubble-pop { from { opacity: 0; transform: translateX(8%) translateY(8px) scale(.96); } to { opacity: 1; transform: translateX(8%) rotate(4deg) scale(1); } }
 @keyframes bubble-shake {
   0%, 100% { transform: translateX(8%) rotate(4deg); }
   25% { transform: translateX(8%) rotate(-5deg) scale(1.08); }
@@ -241,9 +243,8 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
   75% { transform: translateX(8%) rotate(-3deg); }
 }
 @keyframes letter-pop {
-  0% { transform: translateY(60%) scale(0) rotate(-14deg); opacity: 0; }
-  60% { transform: translateY(-8%) scale(1.25) rotate(5deg); opacity: 1; }
-  100% { transform: none; opacity: 1; }
+  from { transform: translateY(5px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 /* "waiter called" tag */
@@ -252,7 +253,7 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
   padding: .55rem 1rem; border-radius: 999px; white-space: nowrap;
   font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff;
   background: var(--color-red); opacity: 0; transform: translateY(10px) scale(.9);
-  transition: opacity .35s ease .9s, transform .5s cubic-bezier(.34,1.56,.64,1) .9s;
+  transition: opacity .25s ease .25s, transform .3s ease .25s;
 }
 .welcome[data-phase="flip"] .welcome__tag { opacity: 1; transform: none; }
 
@@ -262,3 +263,43 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
   .welcome__burst, .welcome__sparkle, .welcome__bubble, .welcome__bubble span, .welcome__ping { animation: none !important; }
   .welcome__flood, .welcome__tag { transition: none; }
 }
+
+/* ───────── Colour modes ───────── */
+html { transition: background-color .4s ease, color .4s ease; }
+
+/* Inverted: true colour inversion of the whole page (yellow → blue, red → cyan). */
+html[data-theme="inverted"] { filter: invert(1); }
+
+/* Dark */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #111113;
+  --color-ink: #f3f2ee;
+  --color-mute: #a1a1a9;
+  --color-line: #2d2d33;
+}
+
+/* panels that are dark in light mode: keep them dark, lifted slightly off the page */
+html[data-theme="dark"] :is(.rounded-\[2rem\], .py-4).bg-ink {
+  background-color: #1a1a1e;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07);
+}
+html[data-theme="dark"] :is(.rounded-\[2rem\], .py-4).text-paper { color: var(--color-day); }
+
+/* translucent white cards → translucent light-on-dark */
+html[data-theme="dark"] :is(.bg-white\/50, .bg-white\/60, .bg-white\/70) { background-color: rgba(255, 255, 255, .05); }
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] details[open].open\:bg-white { background-color: #1d1d22; }
+html[data-theme="dark"] .ring-offset-white { --tw-ring-offset-color: #1d1d22; }
+
+/* backdrop + patterns */
+html[data-theme="dark"] .backdrop__grid {
+  background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, .04) 0 1px, transparent 1px calc(100% / 6));
+}
+html[data-theme="dark"] .stripes {
+  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, .06) 0 2px, transparent 2px 14px);
+}
+
+/* anatomy diagram: lift the dark lamp body off the dark card */
+html[data-theme="dark"] svg [fill="#1a1a1d"] { fill: #2c2c33; }
+html[data-theme="dark"] svg [fill="#26262a"] { fill: #3b3b43; }

@@ -102,12 +102,12 @@ export default function Welcome({ onDone }: { onDone: () => void }) {
   useEffect(() => {
     const t: number[] = [];
     if (phase === "in" && ready)
-      t.push(window.setTimeout(() => setPhase("flip"), reduce ? 300 : 2000));
+      t.push(window.setTimeout(() => setPhase("flip"), reduce ? 250 : 1100));
     if (phase === "flip")
-      t.push(window.setTimeout(() => setPhase("flood"), reduce ? 600 : 2400));
+      t.push(window.setTimeout(() => setPhase("flood"), reduce ? 400 : 1600));
     if (phase === "flood")
-      t.push(window.setTimeout(() => setPhase("out"), reduce ? 50 : 900));
-    if (phase === "out") t.push(window.setTimeout(onDone, 450));
+      t.push(window.setTimeout(() => setPhase("out"), reduce ? 50 : 650));
+    if (phase === "out") t.push(window.setTimeout(onDone, 300));
     return () => t.forEach(clearTimeout);
   }, [phase, ready, reduce, onDone]);
 
@@ -185,7 +185,7 @@ export default function Welcome({ onDone }: { onDone: () => void }) {
             decorative
             color={WELCOME_COLOR}
             flipTick={phase === "in" ? 0 : 1}
-            flipDuration={1.5}
+            flipDuration={1.2}
             smoothFlip
             onReady={onReady}
             className="h-full w-full"
