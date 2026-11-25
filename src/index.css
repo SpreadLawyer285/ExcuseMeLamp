@@ -74,3 +74,191 @@ body { font-family: var(--font-sans); min-height: 100dvh; }
 @media (prefers-reduced-motion: reduce) {
   .spin-slow, .marquee { animation: none; }
 }
+
+/* Welcome decorations — everything follows --accent (yellow → red) */
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #ffd21f; }
+
+.welcome {
+  --accent: var(--color-yellow);
+  --d: min(48vmin, 440px);
+  transition: opacity .4s ease, --accent .5s ease;
+}
+.welcome[data-phase="red"],
+.welcome[data-phase="flood"],
+.welcome[data-phase="out"] { --accent: var(--color-red); }
+
+.welcome__deco { position: absolute; inset: 0; transition: opacity .5s ease; }
+.welcome[data-phase="flood"] .welcome__deco,
+.welcome[data-phase="out"] .welcome__deco { opacity: 0; }
+.welcome__deco > * { position: absolute; }
+
+/* sunburst rays */
+.welcome__burst {
+  left: 50%; top: 50%; width: 170vmax; aspect-ratio: 1; translate: -50% -50%;
+  background: repeating-conic-gradient(color-mix(in srgb, var(--accent) 16%, transparent) 0 5deg, transparent 5deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0, transparent 38%);
+  mask-image: radial-gradient(circle, #000 0, transparent 38%);
+  animation: spin-slow 70s linear infinite;
+}
+
+/* ripples pulsing out of the circle */
+.welcome__ripple {
+  left: 50%; top: 50%; width: var(--d); aspect-ratio: 1; translate: -50% -50%;
+  border: 2px solid var(--accent); border-radius: 50%; opacity: 0;
+  animation: ripple 2.4s cubic-bezier(.2,.6,.3,1) infinite;
+}
+@keyframes ripple { 0% { transform: scale(1); opacity: .6; } 100% { transform: scale(2.4); opacity: 0; } }
+
+/* dashed ring + orbiting dots */
+.welcome__dashed {
+  left: 50%; top: 50%; width: calc(var(--d) + 14vmin); aspect-ratio: 1; translate: -50% -50%;
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 70%, transparent); border-radius: 50%;
+  animation: spin-slow 40s linear infinite reverse;
+}
+.welcome__orbit {
+  left: 50%; top: 50%; width: calc(var(--d) + 22vmin); aspect-ratio: 1; translate: -50% -50%;
+  animation: spin-slow 9s linear infinite;
+}
+.welcome__orbit i { position: absolute; left: 50%; top: 0; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; background: var(--accent); }
+.welcome__orbit i.welcome__orbit-dot--paper { top: auto; bottom: 0; width: 10px; height: 10px; margin-left: -5px; background: var(--color-paper); }
+
+/* twinkling sparkles */
+.welcome__sparkle { position: absolute; color: var(--accent); animation: twinkle 2.2s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { transform: scale(.4) rotate(0deg); opacity: .25; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome__burst, .welcome__ripple, .welcome__dashed, .welcome__orbit, .welcome__sparkle { animation: none; }
+  .welcome__ripple { opacity: .3; }
+}
+
+/* Page backdrop */
+@property --bg-accent { syntax: "<color>"; inherits: true; initial-value: #ffd21f; }
+
+.backdrop { position: fixed; inset: 0; z-index: -10; overflow: hidden; pointer-events: none; transition: --bg-accent .8s ease; }
+
+/* Swiss column lines (6 columns) */
+.backdrop__grid {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(90deg, rgba(14,14,16,.045) 0 1px, transparent 1px calc(100% / 6));
+}
+
+/* soft colour glows */
+.backdrop__blob {
+  position: absolute; width: 60vmax; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bg-accent) 24%, transparent), transparent);
+}
+.backdrop__blob--a { left: -18vmax; top: -14vmax; }
+.backdrop__blob--b { right: -22vmax; bottom: -22vmax; opacity: .8; animation: drift 40s ease-in-out infinite alternate; }
+.backdrop[data-page="order"] .backdrop__blob--a { left: auto; right: -14vmax; }
+@keyframes drift { to { transform: translate3d(-6vmax, -4vmax, 0) scale(1.08); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop__blob--b { animation: none; }
+}
+
+/* Pattern helpers */
+.stripes { background-image: repeating-linear-gradient(135deg, rgba(14,14,16,.07) 0 2px, transparent 2px 14px); }
+.stripes-light { background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.22) 0 2px, transparent 2px 14px); }
+
+/* ───────── Welcome: 3D lamp on a table calls the waiter ───────── */
+@property --accent { syntax: "<color>"; inherits: true; initial-value: #ffd21f; }
+
+.welcome {
+  --accent: var(--color-yellow);
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow: hidden;
+  background: var(--color-ink);
+  transition: opacity .4s ease, --accent .5s ease;
+}
+/* decorations follow the lamp: red a moment after the tumble starts */
+.welcome[data-phase="flip"] { --accent: var(--color-red); transition: opacity .4s ease, --accent .6s ease .55s; }
+.welcome[data-phase="flood"], .welcome[data-phase="out"] { --accent: var(--color-red); }
+.welcome[data-phase="out"] { opacity: 0; pointer-events: none; }
+.welcome__skip { position: absolute; bottom: max(1.5rem, env(safe-area-inset-bottom)); right: 1.5rem; z-index: 3; }
+
+/* background decoration */
+.welcome__deco { position: absolute; inset: 0; transition: opacity .5s ease; }
+.welcome__deco > * { position: absolute; }
+.welcome[data-phase="flood"] .welcome__deco, .welcome[data-phase="out"] .welcome__deco { opacity: 0; }
+.welcome__burst {
+  left: 50%; top: 50%; width: 170vmax; aspect-ratio: 1; translate: -50% -50%;
+  background: repeating-conic-gradient(color-mix(in srgb, var(--accent) 14%, transparent) 0 5deg, transparent 5deg 15deg);
+  -webkit-mask-image: radial-gradient(circle, #000 0, transparent 36%);
+  mask-image: radial-gradient(circle, #000 0, transparent 36%);
+  animation: spin-slow 70s linear infinite;
+}
+.welcome__sparkle { position: absolute; color: var(--accent); animation: twinkle 2.2s ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { transform: scale(.4) rotate(0deg); opacity: .25; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
+
+/* flood grows out of the lamp */
+.welcome__flood {
+  position: absolute; left: 50%; top: 50%; width: 20vmin; aspect-ratio: 1; margin: -10vmin 0 0 -10vmin;
+  border-radius: 50%; background: var(--color-red); transform: scale(0); will-change: transform;
+  transition: transform 1s cubic-bezier(.7,0,.2,1), background-color .6s ease .3s;
+}
+.welcome[data-phase="flood"] .welcome__flood, .welcome[data-phase="out"] .welcome__flood { transform: scale(16); background: var(--color-paper); }
+
+/* the scene */
+.welcome__stage { position: relative; z-index: 2; display: grid; place-items: center; transition: opacity .35s ease, transform .6s ease; }
+.welcome[data-phase="flood"] .welcome__stage, .welcome[data-phase="out"] .welcome__stage { opacity: 0; transform: scale(1.06); }
+
+.welcome__glow {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 90vmin; aspect-ratio: 1; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--accent) 30%, transparent), transparent);
+}
+.welcome__lampbox { position: relative; width: min(84vw, 520px); height: min(56vh, 460px); }
+
+/* table line sits where the lamp's base rests (~78% down the 3D view) */
+.welcome__table { position: absolute; left: 50%; top: 78%; width: min(130vw, 760px); height: auto; translate: -50% -80%; overflow: visible; pointer-events: none; }
+
+/* red call ripples */
+.welcome__ping {
+  position: absolute; left: 50%; top: 50%; width: 55%; aspect-ratio: 1; translate: -50% -50%;
+  border: 2px solid var(--color-red); border-radius: 50%; opacity: 0; pointer-events: none;
+}
+.welcome[data-phase="flip"] .welcome__ping, .welcome[data-phase="flood"] .welcome__ping { animation: ping 1.8s cubic-bezier(.2,.6,.3,1) 0.9s infinite backwards; }
+@keyframes ping { 0% { transform: scale(.7); opacity: .85; } 100% { transform: scale(3.2); opacity: 0; } }
+
+/* speech bubble — starts once the 3D lamp is on screen */
+.welcome__bubble {
+  position: absolute; left: 50%; top: -2%; z-index: 3; display: flex; margin: 0; padding: .3em .6em .35em;
+  transform: translateX(8%) rotate(4deg); visibility: hidden;
+  font-size: clamp(1.8rem, 6vw, 3.4rem); font-weight: 900; line-height: 1; letter-spacing: -.04em; white-space: nowrap;
+  color: var(--color-ink); background: var(--color-paper); border-radius: 1.2em 1.2em 1.2em .3em;
+}
+.welcome__bubble::after {
+  content: ""; position: absolute; left: .55em; bottom: -.3em; width: .7em; height: .7em;
+  background: var(--color-paper); clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+.welcome__bubble span { display: inline-block; white-space: pre; }
+.welcome[data-ready="true"] .welcome__bubble { visibility: visible; animation: bubble-pop .55s cubic-bezier(.34,1.56,.64,1) .45s backwards; }
+.welcome[data-ready="true"] .welcome__bubble span { animation: letter-pop .5s cubic-bezier(.34,1.56,.64,1) backwards; animation-delay: calc(.65s + var(--i) * 50ms); }
+.welcome[data-phase="flip"] .welcome__bubble { animation: bubble-shake .7s ease .1s; }
+@keyframes bubble-pop { from { transform: translateX(8%) rotate(4deg) scale(0); } to { transform: translateX(8%) rotate(4deg) scale(1); } }
+@keyframes bubble-shake {
+  0%, 100% { transform: translateX(8%) rotate(4deg); }
+  25% { transform: translateX(8%) rotate(-5deg) scale(1.08); }
+  50% { transform: translateX(8%) rotate(7deg) scale(1.08); }
+  75% { transform: translateX(8%) rotate(-3deg); }
+}
+@keyframes letter-pop {
+  0% { transform: translateY(60%) scale(0) rotate(-14deg); opacity: 0; }
+  60% { transform: translateY(-8%) scale(1.25) rotate(5deg); opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+
+/* "waiter called" tag */
+.welcome__tag {
+  position: absolute; left: 50%; bottom: -2.2rem; translate: -50% 0; display: inline-flex; align-items: center; gap: .5rem; margin: 0;
+  padding: .55rem 1rem; border-radius: 999px; white-space: nowrap;
+  font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #fff;
+  background: var(--color-red); opacity: 0; transform: translateY(10px) scale(.9);
+  transition: opacity .35s ease .9s, transform .5s cubic-bezier(.34,1.56,.64,1) .9s;
+}
+.welcome[data-phase="flip"] .welcome__tag { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .page-enter { animation: none; }
+  .welcome__burst, .welcome__sparkle, .welcome__bubble, .welcome__bubble span, .welcome__ping { animation: none !important; }
+  .welcome__flood, .welcome__tag { transition: none; }
+}
