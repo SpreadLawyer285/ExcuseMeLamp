@@ -8,6 +8,7 @@ import Welcome from "./components/Welcome";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Order from "./pages/Order";
+import Story from './pages/Story'
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,6 +38,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/order" element={<Order />} />
+            <Route path="/story" element={<Story />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>

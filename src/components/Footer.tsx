@@ -1,5 +1,5 @@
-import { Link } from "react-router";
-import Container from "./Container";
+import { Link } from 'react-router'
+import Container from './Container'
 
 export default function Footer() {
   return (
@@ -7,13 +7,11 @@ export default function Footer() {
       <Container className="flex flex-col justify-between gap-4 text-sm text-mute sm:flex-row">
         <p className="font-semibold text-ink">Excuse Me Lamp</p>
         <p>Finished? Turn it over. Your waiter takes it from there.</p>
-        <Link
-          to="/order"
-          className="font-medium text-ink underline underline-offset-4"
-        >
-          Order
-        </Link>
+        <nav aria-label="Footer" className="flex gap-5 font-medium text-ink">
+          <Link to="/story" className="underline underline-offset-4">Story</Link>
+          <Link to="/order" className="underline underline-offset-4">Order</Link>
+        </nav>
       </Container>
     </footer>
-  );
+  )
 }

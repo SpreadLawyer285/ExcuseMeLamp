@@ -3,7 +3,7 @@ import { ButtonLink } from "./Button";
 import ThemeSwitch from "./ThemeSwitch";
 
 const link = ({ isActive }: { isActive: boolean }) =>
-  `rounded-full px-4 py-2 text-sm font-medium transition-colors ${isActive ? "bg-ink/10 text-ink" : "text-mute hover:text-ink"}`;
+  `rounded-full px-3 py-2 text-sm font-medium transition-colors sm:px-4 ${isActive ? 'bg-ink/10 text-ink' : 'text-mute hover:text-ink'}`
 
 export default function Header() {
   return (
@@ -20,6 +20,7 @@ export default function Header() {
           <NavLink to="/" end className={link}>
             Lamp
           </NavLink>
+          <NavLink to="/story" className={link}>Story</NavLink>
           <NavLink to="/order" className={link}>
             Order
           </NavLink>
